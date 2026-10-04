@@ -1,6 +1,6 @@
 // ==========================================
 // STALAY CONTROL
-// VERSION 2
+// VERSION 3 — COMPTES + PERMISSIONS
 // ==========================================
 
 
@@ -58,9 +58,7 @@ const loginError =
     document.getElementById("login-error");
 
 const createOwnerButton =
-    document.getElementById(
-        "create-owner-button"
-    );
+    document.getElementById("create-owner-button");
 
 const navItems =
     document.querySelectorAll(
@@ -77,185 +75,188 @@ const pageTitle =
 
 
 // ==========================================
-// CRÉATION DU COMPTE PATRON
+// CRÉER COMPTE PATRON
 // ==========================================
 
-createOwnerButton.addEventListener(
-    "click",
-    () => {
+if (createOwnerButton) {
 
-        if (ownerAccount) {
+    createOwnerButton.addEventListener(
+        "click",
+        () => {
+
+            if (ownerAccount) {
+
+                alert(
+                    "Un compte patron existe déjà."
+                );
+
+                return;
+            }
+
+            const name =
+                prompt(
+                    "Nom du patron :"
+                );
+
+            if (!name) return;
+
+            const username =
+                prompt(
+                    "Choisissez votre identifiant :"
+                );
+
+            if (!username) return;
+
+            const code =
+                prompt(
+                    "Choisissez votre code personnel :"
+                );
+
+            if (!code) return;
+
+            const cleanUsername =
+                username
+                    .trim()
+                    .toLowerCase();
+
+            ownerAccount = {
+
+                name:
+                    name.trim(),
+
+                username:
+                    cleanUsername,
+
+                code:
+                    code
+
+            };
+
+            localStorage.setItem(
+                "stalay_owner",
+                JSON.stringify(ownerAccount)
+            );
 
             alert(
-                "Un compte patron existe déjà."
+                "Compte patron créé avec succès ✅"
             );
-
-            return;
 
         }
+    );
 
-
-        const name =
-            prompt(
-                "Nom du patron :"
-            );
-
-
-        if (!name) return;
-
-
-        const username =
-            prompt(
-                "Choisissez votre identifiant :"
-            );
-
-
-        if (!username) return;
-
-
-        const code =
-            prompt(
-                "Choisissez votre code personnel :"
-            );
-
-
-        if (!code) return;
-
-
-        ownerAccount = {
-
-            name: name.trim(),
-
-            username:
-                username.trim().toLowerCase(),
-
-            code: code
-
-        };
-
-
-        localStorage.setItem(
-            "stalay_owner",
-            JSON.stringify(ownerAccount)
-        );
-
-
-        alert(
-            "Compte patron créé avec succès ✅"
-        );
-
-    }
-);
+}
 
 
 // ==========================================
 // CONNEXION
 // ==========================================
 
-loginForm.addEventListener(
-    "submit",
-    event => {
+if (loginForm) {
 
-        event.preventDefault();
+    loginForm.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+            const username =
+                document.getElementById(
+                    "login-username"
+                ).value
+                    .trim()
+                    .toLowerCase();
+
+            const code =
+                document.getElementById(
+                    "login-password"
+                ).value;
+
+            // ==========================
+            // 👑 CONNEXION PATRON
+            // ==========================
+
+            if (
+                ownerAccount &&
+                username === ownerAccount.username &&
+                code === ownerAccount.code
+            ) {
+
+                currentUser = {
+
+                    name:
+                        ownerAccount.name,
+
+                    username:
+                        ownerAccount.username,
+
+                    role:
+                        "owner"
+
+                };
+
+                sessionStorage.setItem(
+                    "stalay_current_user",
+                    JSON.stringify(currentUser)
+                );
+
+                loginError.textContent = "";
+
+                showApp();
+
+                return;
+            }
 
 
-        const username =
-            document.getElementById(
-                "login-username"
-            ).value
-                .trim()
-                .toLowerCase();
+            // ==========================
+            // 👤 CONNEXION EMPLOYÉ
+            // ==========================
+
+            const employee =
+                accounts.find(
+                    account =>
+                        account.username === username &&
+                        account.code === code
+                );
+
+            if (employee) {
+
+                currentUser = {
+
+                    name:
+                        employee.name,
+
+                    username:
+                        employee.username,
+
+                    role:
+                        "employee"
+
+                };
+
+                sessionStorage.setItem(
+                    "stalay_current_user",
+                    JSON.stringify(currentUser)
+                );
+
+                loginError.textContent = "";
+
+                showApp();
+
+                return;
+            }
 
 
-        const code =
-            document.getElementById(
-                "login-password"
-            ).value;
+            // ==========================
+            // ❌ IDENTIFIANTS INCORRECTS
+            // ==========================
 
-
-        // 👑 PATRON
-
-        if (
-            ownerAccount &&
-            username === ownerAccount.username &&
-            code === ownerAccount.code
-        ) {
-
-            currentUser = {
-
-                name:
-                    ownerAccount.name,
-
-                username:
-                    ownerAccount.username,
-
-                role:
-                    "owner"
-
-            };
-
-
-            sessionStorage.setItem(
-                "stal​​ay_current_user",
-                JSON.stringify(currentUser)
-            );
-
-
-            loginError.textContent = "";
-
-            showApp();
-
-            return;
+            loginError.textContent =
+                "Identifiant ou code incorrect.";
 
         }
+    );
 
-
-        // 👤 EMPLOYÉ
-
-        const employee =
-            accounts.find(
-                account =>
-                    account.username === username &&
-                    account.code === code
-            );
-
-
-        if (employee) {
-
-            currentUser = {
-
-                name:
-                    employee.name,
-
-                username:
-                    employee.username,
-
-                role:
-                    "employee"
-
-            };
-
-
-            sessionStorage.setItem(
-                "stal​​ay_current_user",
-                JSON.stringify(currentUser)
-            );
-
-
-            loginError.textContent = "";
-
-            showApp();
-
-            return;
-
-        }
-
-
-        loginError.textContent =
-            "Identifiant ou code incorrect.";
-
-    }
-);
+}
 
 
 // ==========================================
@@ -264,9 +265,12 @@ loginForm.addEventListener(
 
 function showApp() {
 
+    if (!currentUser) {
+        return;
+    }
+
     loginScreen.style.display =
         "none";
-
 
     const profileName =
         document.querySelector(
@@ -278,14 +282,12 @@ function showApp() {
             ".profile small"
         );
 
-
     if (profileName) {
 
         profileName.textContent =
             currentUser.name;
 
     }
-
 
     if (profileRole) {
 
@@ -296,14 +298,22 @@ function showApp() {
 
     }
 
-
     applyPermissions();
+
+    // L'employé arrive directement sur les ventes
+    if (
+        currentUser.role === "employee"
+    ) {
+
+        showSection("sales");
+
+    }
 
 }
 
 
 // ==========================================
-// PERMISSIONS
+// 🔐 PERMISSIONS
 // ==========================================
 
 function applyPermissions() {
@@ -312,15 +322,6 @@ function applyPermissions() {
         currentUser &&
         currentUser.role === "owner";
 
-
-    const employeesButton =
-        document.querySelector(
-            '[data-section="employees"]'
-            function applyPermissions() {
-
-    const isOwner =
-        currentUser &&
-        currentUser.role === "owner";
 
     const employeesButton =
         document.querySelector(
@@ -342,95 +343,151 @@ function applyPermissions() {
             '[data-section="products"]'
         );
 
-    // =========================
+
+    // ======================================
     // 👤 EMPLOYÉ
-    // =========================
+    // ======================================
 
     if (!isOwner) {
 
-        // ❌ Pas de gestion des employés
         if (employeesButton) {
-            employeesButton.style.display = "none";
+
+            employeesButton.style.display =
+                "none";
+
         }
 
-        // ❌ Pas de rapports financiers
         if (reportsButton) {
-            reportsButton.style.display = "none";
+
+            reportsButton.style.display =
+                "none";
+
         }
 
-        // ❌ Pas des paramètres
         if (settingsButton) {
-            settingsButton.style.display = "none";
+
+            settingsButton.style.display =
+                "none";
+
         }
 
-        // 👤 L'employé garde l'accès aux produits
+        // Produits autorisés
         if (productsButton) {
-            productsButton.style.display = "";
+
+            productsButton.style.display =
+                "";
+
         }
 
     }
 
-    // =========================
+
+    // ======================================
     // 👑 PATRON
-    // =========================
+    // ======================================
 
     else {
 
         if (employeesButton) {
-            employeesButton.style.display = "";
+
+            employeesButton.style.display =
+                "";
+
         }
 
         if (reportsButton) {
-            reportsButton.style.display = "";
+
+            reportsButton.style.display =
+                "";
+
         }
 
         if (settingsButton) {
-            settingsButton.style.display = "";
+
+            settingsButton.style.display =
+                "";
+
         }
 
         if (productsButton) {
-            productsButton.style.display = "";
+
+            productsButton.style.display =
+                "";
+
         }
 
     }
+
 }
-===================
+
+
+// ==========================================
 // NAVIGATION
 // ==========================================
 
-navItems.forEach(item => {
+navItems.forEach(
+    item => {
 
-    item.addEventListener(
-        "click",
-        () => {
+        item.addEventListener(
+            "click",
+            () => {
 
-            const sectionName =
-                item.dataset.section;
+                const sectionName =
+                    item.dataset.section;
 
-            showSection(sectionName);
+                // Protection supplémentaire
+                if (
+                    currentUser &&
+                    currentUser.role === "employee" &&
+                    (
+                        sectionName === "employees" ||
+                        sectionName === "reports" ||
+                        sectionName === "settings"
+                    )
+                ) {
+
+                    alert(
+                        "Cette section est réservée au patron."
+                    );
+
+                    return;
+
+                }
+
+                showSection(
+                    sectionName
+                );
+
+            }
+        );
+
+    }
+);
+
+
+// ==========================================
+// AFFICHER UNE SECTION
+// ==========================================
+
+function showSection(
+    sectionName
+) {
+
+    sections.forEach(
+        section => {
+
+            section.classList.remove(
+                "active-section"
+            );
 
         }
     );
-
-});
-
-
-function showSection(sectionName) {
-
-    sections.forEach(section => {
-
-        section.classList.remove(
-            "active-section"
-        );
-
-    });
 
 
     const selectedSection =
         document.getElementById(
             sectionName
         );
-
 
     if (selectedSection) {
 
@@ -441,25 +498,26 @@ function showSection(sectionName) {
     }
 
 
-    navItems.forEach(item => {
+    navItems.forEach(
+        item => {
 
-        item.classList.remove(
-            "active"
-        );
-
-
-        if (
-            item.dataset.section ===
-            sectionName
-        ) {
-
-            item.classList.add(
+            item.classList.remove(
                 "active"
             );
 
-        }
+            if (
+                item.dataset.section ===
+                sectionName
+            ) {
 
-    });
+                item.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
 
 
     const titles = {
@@ -485,18 +543,24 @@ function showSection(sectionName) {
     };
 
 
-    pageTitle.textContent =
-        titles[sectionName] ||
-        "Stalay Control";
+    if (pageTitle) {
+
+        pageTitle.textContent =
+            titles[sectionName] ||
+            "Stalay Control";
+
+    }
 
 }
 
 
 // ==========================================
-// FORMATAGE FCFA
+// FORMAT FCFA
 // ==========================================
 
-function formatFCFA(amount) {
+function formatFCFA(
+    amount
+) {
 
     return Number(
         amount
@@ -544,14 +608,22 @@ const closeSaleModal =
 
 function openSaleModal() {
 
+    if (!currentUser) {
+        return;
+    }
+
     saleModal.classList.add(
         "show"
     );
 
+    const input =
+        document.getElementById(
+            "sale-product"
+        );
 
-    document.getElementById(
-        "sale-product"
-    ).focus();
+    if (input) {
+        input.focus();
+    }
 
 }
 
@@ -567,125 +639,153 @@ function closeModal() {
 }
 
 
-openSaleButton.addEventListener(
-    "click",
-    openSaleModal
-);
+if (openSaleButton) {
 
-openSaleButton2.addEventListener(
-    "click",
-    openSaleModal
-);
+    openSaleButton.addEventListener(
+        "click",
+        openSaleModal
+    );
 
-quickSale.addEventListener(
-    "click",
-    openSaleModal
-);
+}
 
-closeSaleModal.addEventListener(
-    "click",
-    closeModal
-);
+if (openSaleButton2) {
 
+    openSaleButton2.addEventListener(
+        "click",
+        openSaleModal
+    );
 
-saleModal.addEventListener(
-    "click",
-    event => {
+}
 
-        if (
-            event.target ===
-            saleModal
-        ) {
+if (quickSale) {
 
-            closeModal();
+    quickSale.addEventListener(
+        "click",
+        openSaleModal
+    );
+
+}
+
+if (closeSaleModal) {
+
+    closeSaleModal.addEventListener(
+        "click",
+        closeModal
+    );
+
+}
+
+if (saleModal) {
+
+    saleModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                saleModal
+            ) {
+
+                closeModal();
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 // ==========================================
 // AJOUTER UNE VENTE
 // ==========================================
 
-saleForm.addEventListener(
-    "submit",
-    event => {
+if (saleForm) {
 
-        event.preventDefault();
+    saleForm.addEventListener(
+        "submit",
+        event => {
 
+            event.preventDefault();
 
-        const product =
-            document.getElementById(
-                "sale-product"
-            ).value.trim();
+            if (!currentUser) {
 
+                alert(
+                    "Vous devez être connecté."
+                );
 
-        const amount =
-            Number(
+                return;
+
+            }
+
+            const product =
                 document.getElementById(
-                    "sale-amount"
-                ).value
+                    "sale-product"
+                ).value.trim();
+
+            const amount =
+                Number(
+                    document.getElementById(
+                        "sale-amount"
+                    ).value
+                );
+
+
+            if (
+                !product ||
+                amount <= 0
+            ) {
+
+                alert(
+                    "Veuillez remplir correctement les informations."
+                );
+
+                return;
+
+            }
+
+
+            const sale = {
+
+                id:
+                    Date.now(),
+
+                product:
+                    product,
+
+                amount:
+                    amount,
+
+                date:
+                    new Date().toISOString(),
+
+                seller:
+                    currentUser.name
+
+            };
+
+
+            sales.unshift(
+                sale
             );
 
+            saveData();
 
-        if (
-            !product ||
-            amount <= 0
-        ) {
+            updateDashboard();
+
+            renderSales();
+
+            closeModal();
+
 
             alert(
-                "Veuillez remplir correctement les informations."
+                "Vente enregistrée avec succès ✅"
             );
 
-            return;
-
         }
+    );
 
-
-        const sale = {
-
-            id:
-                Date.now(),
-
-            product:
-                product,
-
-            amount:
-                amount,
-
-            date:
-                new Date().toISOString(),
-
-            seller:
-                currentUser
-                    ? currentUser.name
-                    : "Inconnu"
-
-        };
-
-
-        sales.unshift(
-            sale
-        );
-
-
-        saveData();
-
-        updateDashboard();
-
-        renderSales();
-
-        closeModal();
-
-
-        alert(
-            "Vente enregistrée avec succès ✅"
-        );
-
-    }
-);
+}
 
 
 // ==========================================
@@ -699,12 +799,10 @@ function saveData() {
         JSON.stringify(sales)
     );
 
-
     localStorage.setItem(
         "stalay_products",
         JSON.stringify(products)
     );
-
 
     localStorage.setItem(
         "stalay_employees",
@@ -715,7 +813,7 @@ function saveData() {
 
 
 // ==========================================
-// AJOUTER UN EMPLOYÉ
+// 👑 AJOUTER UN EMPLOYÉ
 // ==========================================
 
 const addEmployeeButton =
@@ -724,131 +822,134 @@ const addEmployeeButton =
     );
 
 
-addEmployeeButton.addEventListener(
-    "click",
-    () => {
+if (addEmployeeButton) {
 
-        if (
-            !currentUser ||
-            currentUser.role !== "owner"
-        ) {
+    addEmployeeButton.addEventListener(
+        "click",
+        () => {
+
+            if (
+                !currentUser ||
+                currentUser.role !== "owner"
+            ) {
+
+                alert(
+                    "Seul le patron peut créer un compte employé."
+                );
+
+                return;
+
+            }
+
+
+            const name =
+                prompt(
+                    "Nom de l'employé :"
+                );
+
+            if (!name) return;
+
+
+            const username =
+                prompt(
+                    "Identifiant de l'employé :"
+                );
+
+            if (!username) return;
+
+
+            const code =
+                prompt(
+                    "Code de l'employé :"
+                );
+
+            if (!code) return;
+
+
+            const cleanUsername =
+                username
+                    .trim()
+                    .toLowerCase();
+
+
+            // Vérifier l'identifiant
+            const exists =
+                accounts.some(
+                    account =>
+                        account.username ===
+                        cleanUsername
+                );
+
+
+            if (exists) {
+
+                alert(
+                    "Cet identifiant existe déjà."
+                );
+
+                return;
+
+            }
+
+
+            const employee = {
+
+                id:
+                    Date.now(),
+
+                name:
+                    name.trim(),
+
+                username:
+                    cleanUsername,
+
+                code:
+                    code
+
+            };
+
+
+            accounts.push(
+                employee
+            );
+
+
+            employees.push({
+
+                id:
+                    employee.id,
+
+                name:
+                    employee.name
+
+            });
+
+
+            localStorage.setItem(
+                "stalay_accounts",
+                JSON.stringify(accounts)
+            );
+
+
+            saveData();
+
+            renderEmployees();
+
+            updateDashboard();
+
 
             alert(
-                "Seul le patron peut créer un compte employé."
+                "Compte employé créé avec succès ✅\n\n" +
+                "Identifiant : " +
+                employee.username +
+                "\nCode : " +
+                employee.code
             );
-
-            return;
 
         }
+    );
 
-
-        const name =
-            prompt(
-                "Nom de l'employé :"
-            );
-
-
-        if (!name) return;
-
-
-        const username =
-            prompt(
-                "Identifiant de l'employé :"
-            );
-
-
-        if (!username) return;
-
-
-        const code =
-            prompt(
-                "Code de l'employé :"
-            );
-
-
-        if (!code) return;
-
-
-        const cleanUsername =
-            username
-                .trim()
-                .toLowerCase();
-
-
-        const exists =
-            accounts.some(
-                account =>
-                    account.username ===
-                    cleanUsername
-            );
-
-
-        if (exists) {
-
-            alert(
-                "Cet identifiant existe déjà."
-            );
-
-            return;
-
-        }
-
-
-        const employee = {
-
-            id:
-                Date.now(),
-
-            name:
-                name.trim(),
-
-            username:
-                cleanUsername,
-
-            code:
-                code
-
-        };
-
-
-        accounts.push(
-            employee
-        );
-
-
-        employees.push({
-
-            id:
-                employee.id,
-
-            name:
-                employee.name
-
-        });
-
-
-        localStorage.setItem(
-            "stalay_accounts",
-            JSON.stringify(accounts)
-        );
-
-
-        saveData();
-
-        renderEmployees();
-
-        updateDashboard();
-
-
-        alert(
-            "Compte employé créé avec succès ✅\n\nIdentifiant : " +
-            employee.username +
-            "\nCode : " +
-            employee.code
-        );
-
-    }
-);
+}
 
 
 // ==========================================
@@ -861,6 +962,10 @@ function renderEmployees() {
         document.getElementById(
             "employees-list"
         );
+
+    if (!container) {
+        return;
+    }
 
 
     if (
@@ -964,46 +1069,89 @@ function updateDashboard() {
             );
 
 
-    document.getElementById(
-        "today-sales"
-    ).textContent =
-        formatFCFA(
-            todayTotal
+    const todaySales =
+        document.getElementById(
+            "today-sales"
+        );
+
+    const monthlySales =
+        document.getElementById(
+            "monthly-sales"
+        );
+
+    const salesCount =
+        document.getElementById(
+            "sales-count"
+        );
+
+    const employeeCount =
+        document.getElementById(
+            "employee-count"
+        );
+
+    const reportTotal =
+        document.getElementById(
+            "report-total"
+        );
+
+    const reportCount =
+        document.getElementById(
+            "report-count"
         );
 
 
-    document.getElementById(
-        "monthly-sales"
-    ).textContent =
-        formatFCFA(
-            total
-        );
+    if (todaySales) {
+
+        todaySales.textContent =
+            formatFCFA(
+                todayTotal
+            );
+
+    }
 
 
-    document.getElementById(
-        "sales-count"
-    ).textContent =
-        sales.length;
+    if (monthlySales) {
+
+        monthlySales.textContent =
+            formatFCFA(
+                total
+            );
+
+    }
 
 
-    document.getElementById(
-        "employee-count"
-    ).textContent =
-        employees.length;
+    if (salesCount) {
+
+        salesCount.textContent =
+            sales.length;
+
+    }
 
 
-    document.getElementById(
-        "report-total"
-    ).textContent =
-        formatFCFA(
-            total
-        );
+    if (employeeCount) {
+
+        employeeCount.textContent =
+            employees.length;
+
+    }
 
 
-    document.getElementById(
-        "report-count"
-    ).textContent =
-        sales.length;
+    if (reportTotal) {
+
+        reportTotal.textContent =
+            formatFCFA(
+                total
+            );
+
+    }
+
+
+    if (reportCount) {
+
+        reportCount.textContent =
+            sales.length;
+
+    }
 
 }
 
@@ -1025,6 +1173,16 @@ function renderSales(
         document.getElementById(
             "all-sales"
         );
+
+
+    if (
+        !recentContainer ||
+        !allContainer
+    ) {
+
+        return;
+
+    }
 
 
     const filtered =
@@ -1129,12 +1287,14 @@ function createSaleHTML(
 
                 <small>
                     ${date}
-                    ${sale.seller
-                        ? " • " +
-                          escapeHTML(
-                              sale.seller
-                          )
-                        : ""}
+                    ${
+                        sale.seller
+                            ? " • " +
+                              escapeHTML(
+                                  sale.seller
+                              )
+                            : ""
+                    }
                 </small>
 
             </div>
@@ -1155,7 +1315,7 @@ function createSaleHTML(
 
 
 // ==========================================
-// RECHERCHE DES VENTES
+// RECHERCHE VENTES
 // ==========================================
 
 const salesSearch =
@@ -1164,16 +1324,20 @@ const salesSearch =
     );
 
 
-salesSearch.addEventListener(
-    "input",
-    () => {
+if (salesSearch) {
 
-        renderSales(
-            salesSearch.value
-        );
+    salesSearch.addEventListener(
+        "input",
+        () => {
 
-    }
-);
+            renderSales(
+                salesSearch.value
+            );
+
+        }
+    );
+
+}
 
 
 // ==========================================
@@ -1186,66 +1350,86 @@ const addProductButton =
     );
 
 
-addProductButton.addEventListener(
-    "click",
-    () => {
+if (addProductButton) {
 
-        const name =
-            prompt(
-                "Nom du produit :"
-            );
+    addProductButton.addEventListener(
+        "click",
+        () => {
+
+            // Employé ne peut pas ajouter
+            // de produits
+
+            if (
+                !currentUser ||
+                currentUser.role !== "owner"
+            ) {
+
+                alert(
+                    "Seul le patron peut ajouter des produits."
+                );
+
+                return;
+
+            }
 
 
-        if (!name) return;
-
-
-        const price =
-            Number(
+            const name =
                 prompt(
-                    "Prix du produit en FCFA :"
-                )
-            );
+                    "Nom du produit :"
+                );
+
+            if (!name) return;
 
 
-        if (
-            !price ||
-            price <= 0
-        ) {
+            const price =
+                Number(
+                    prompt(
+                        "Prix du produit en FCFA :"
+                    )
+                );
+
+
+            if (
+                !price ||
+                price <= 0
+            ) {
+
+                alert(
+                    "Prix invalide."
+                );
+
+                return;
+
+            }
+
+
+            products.push({
+
+                id:
+                    Date.now(),
+
+                name:
+                    name.trim(),
+
+                price:
+                    price
+
+            });
+
+
+            saveData();
+
+            renderProducts();
+
 
             alert(
-                "Prix invalide."
+                "Produit ajouté ✅"
             );
 
-            return;
-
         }
+    );
 
-
-        products.push({
-
-            id:
-                Date.now(),
-
-            name:
-                name,
-
-            price:
-                price
-
-        });
-
-
-        saveData();
-
-        renderProducts();
-
-
-        alert(
-            "Produit ajouté ✅"
-        );
-
-    }
-);
+}
 
 
 function renderProducts() {
@@ -1254,6 +1438,11 @@ function renderProducts() {
         document.getElementById(
             "products-list"
         );
+
+
+    if (!container) {
+        return;
+    }
 
 
     if (
@@ -1351,22 +1540,24 @@ const logoutButton =
     );
 
 
-logoutButton.addEventListener(
-    "click",
-    () => {
+if (logoutButton) {
 
-        sessionStorage.removeItem(
-            "stalay_current_user"
-        );
+    logoutButton.addEventListener(
+        "click",
+        () => {
 
+            sessionStorage.removeItem(
+                "stalay_current_user"
+            );
 
-        currentUser = null;
+            currentUser = null;
 
+            location.reload();
 
-        location.reload();
+        }
+    );
 
-    }
-);
+}
 
 
 // ==========================================
