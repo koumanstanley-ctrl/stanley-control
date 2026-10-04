@@ -1,11 +1,51 @@
 // ==========================================
 // STALAY CONTROL
-// VERSION 1
+// VERSION 2
 // ==========================================
 
 
 // ==========================================
-// CONNEXION
+// COMPTES
+// ==========================================
+
+let ownerAccount =
+    JSON.parse(
+        localStorage.getItem("stalay_owner")
+    ) || null;
+
+let accounts =
+    JSON.parse(
+        localStorage.getItem("stalay_accounts")
+    ) || [];
+
+let currentUser =
+    JSON.parse(
+        sessionStorage.getItem("stalay_current_user")
+    ) || null;
+
+
+// ==========================================
+// DONNÉES
+// ==========================================
+
+let sales =
+    JSON.parse(
+        localStorage.getItem("stalay_sales")
+    ) || [];
+
+let products =
+    JSON.parse(
+        localStorage.getItem("stalay_products")
+    ) || [];
+
+let employees =
+    JSON.parse(
+        localStorage.getItem("stalay_employees")
+    ) || [];
+
+
+// ==========================================
+// ELEMENTS
 // ==========================================
 
 const loginScreen =
@@ -17,90 +57,10 @@ const loginForm =
 const loginError =
     document.getElementById("login-error");
 
-
-loginForm.addEventListener(
-    "submit",
-    function(event) {
-
-        event.preventDefault();
-
-        const username =
-            document.getElementById(
-                "login-username"
-            ).value.trim();
-
-        const password =
-            document.getElementById(
-                "login-password"
-            ).value;
-        
-
-if (
-    username === "admin" &&
-    password === "1234"
-) {
-
-    loginError.textContent = "";
-
-    document.querySelector(
-        ".profile strong"
-    ).textContent = "Stalay";
-
-    document.querySelector(
-        ".profile small"
-    ).textContent = "Propriétaire";
-
-    loginScreen.style.display = "none";
-
-
-} else if (
-    username === "employe" &&
-    password === "1234"
-) {
-
-    loginError.textContent = "";
-
-    document.querySelector(
-        ".profile strong"
-    ).textContent = "Employé";
-
-    document.querySelector(
-        ".profile small"
-    ).textContent = "Employé";
-
-    loginScreen.style.display = "none";
-
-
-} else {
-
-    loginError.textContent =
-        "Identifiant ou mot de passe incorrect.";
-
-}
-    }
-);
-
-
-// ==========================================
-// DONNÉES
-// ==========================================
-
-let sales = JSON.parse(
-    localStorage.getItem("stalay_sales")
-) || [];
-
-let products = JSON.parse(
-    localStorage.getItem("stalay_products")
-) || [];
-
-let employees = JSON.parse(
-    localStorage.getItem("stalay_employees")
-) || [];
-
-
-// ==========================================
-// ELEMENTS
-// ==========================================
+const createOwnerButton =
+    document.getElementById(
+        "create-owner-button"
+    );
 
 const navItems =
     document.querySelectorAll(
@@ -114,6 +74,303 @@ const sections =
 
 const pageTitle =
     document.getElementById("page-title");
+
+
+// ==========================================
+// CRÉATION DU COMPTE PATRON
+// ==========================================
+
+createOwnerButton.addEventListener(
+    "click",
+    () => {
+
+        if (ownerAccount) {
+
+            alert(
+                "Un compte patron existe déjà."
+            );
+
+            return;
+
+        }
+
+
+        const name =
+            prompt(
+                "Nom du patron :"
+            );
+
+
+        if (!name) return;
+
+
+        const username =
+            prompt(
+                "Choisissez votre identifiant :"
+            );
+
+
+        if (!username) return;
+
+
+        const code =
+            prompt(
+                "Choisissez votre code personnel :"
+            );
+
+
+        if (!code) return;
+
+
+        ownerAccount = {
+
+            name: name.trim(),
+
+            username:
+                username.trim().toLowerCase(),
+
+            code: code
+
+        };
+
+
+        localStorage.setItem(
+            "stalay_owner",
+            JSON.stringify(ownerAccount)
+        );
+
+
+        alert(
+            "Compte patron créé avec succès ✅"
+        );
+
+    }
+);
+
+
+// ==========================================
+// CONNEXION
+// ==========================================
+
+loginForm.addEventListener(
+    "submit",
+    event => {
+
+        event.preventDefault();
+
+
+        const username =
+            document.getElementById(
+                "login-username"
+            ).value
+                .trim()
+                .toLowerCase();
+
+
+        const code =
+            document.getElementById(
+                "login-password"
+            ).value;
+
+
+        // 👑 PATRON
+
+        if (
+            ownerAccount &&
+            username === ownerAccount.username &&
+            code === ownerAccount.code
+        ) {
+
+            currentUser = {
+
+                name:
+                    ownerAccount.name,
+
+                username:
+                    ownerAccount.username,
+
+                role:
+                    "owner"
+
+            };
+
+
+            sessionStorage.setItem(
+                "stal​​ay_current_user",
+                JSON.stringify(currentUser)
+            );
+
+
+            loginError.textContent = "";
+
+            showApp();
+
+            return;
+
+        }
+
+
+        // 👤 EMPLOYÉ
+
+        const employee =
+            accounts.find(
+                account =>
+                    account.username === username &&
+                    account.code === code
+            );
+
+
+        if (employee) {
+
+            currentUser = {
+
+                name:
+                    employee.name,
+
+                username:
+                    employee.username,
+
+                role:
+                    "employee"
+
+            };
+
+
+            sessionStorage.setItem(
+                "stal​​ay_current_user",
+                JSON.stringify(currentUser)
+            );
+
+
+            loginError.textContent = "";
+
+            showApp();
+
+            return;
+
+        }
+
+
+        loginError.textContent =
+            "Identifiant ou code incorrect.";
+
+    }
+);
+
+
+// ==========================================
+// AFFICHER L'APPLICATION
+// ==========================================
+
+function showApp() {
+
+    loginScreen.style.display =
+        "none";
+
+
+    const profileName =
+        document.querySelector(
+            ".profile strong"
+        );
+
+    const profileRole =
+        document.querySelector(
+            ".profile small"
+        );
+
+
+    if (profileName) {
+
+        profileName.textContent =
+            currentUser.name;
+
+    }
+
+
+    if (profileRole) {
+
+        profileRole.textContent =
+            currentUser.role === "owner"
+                ? "Patron"
+                : "Employé";
+
+    }
+
+
+    applyPermissions();
+
+}
+
+
+// ==========================================
+// PERMISSIONS
+// ==========================================
+
+function applyPermissions() {
+
+    const isOwner =
+        currentUser &&
+        currentUser.role === "owner";
+
+
+    const employeesButton =
+        document.querySelector(
+            '[data-section="employees"]'
+        );
+
+
+    const reportsButton =
+        document.querySelector(
+            '[data-section="reports"]'
+        );
+
+
+    const productsButton =
+        document.querySelector(
+            '[data-section="products"]'
+        );
+
+
+    if (!isOwner) {
+
+        if (employeesButton) {
+
+            employeesButton.style.display =
+                "none";
+
+        }
+
+
+        if (reportsButton) {
+
+            reportsButton.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    else {
+
+        if (employeesButton) {
+
+            employeesButton.style.display =
+                "";
+
+        }
+
+
+        if (reportsButton) {
+
+            reportsButton.style.display =
+                "";
+
+        }
+
+    }
+
+}
 
 
 // ==========================================
@@ -165,13 +422,19 @@ function showSection(sectionName) {
 
     navItems.forEach(item => {
 
-        item.classList.remove("active");
+        item.classList.remove(
+            "active"
+        );
+
 
         if (
-            item.dataset.section === sectionName
+            item.dataset.section ===
+            sectionName
         ) {
 
-            item.classList.add("active");
+            item.classList.add(
+                "active"
+            );
 
         }
 
@@ -180,17 +443,23 @@ function showSection(sectionName) {
 
     const titles = {
 
-        dashboard: "Tableau de bord",
+        dashboard:
+            "Tableau de bord",
 
-        sales: "Ventes",
+        sales:
+            "Ventes",
 
-        products: "Produits",
+        products:
+            "Produits",
 
-        employees: "Employés",
+        employees:
+            "Employés",
 
-        reports: "Rapports",
+        reports:
+            "Rapports",
 
-        settings: "Paramètres"
+        settings:
+            "Paramètres"
 
     };
 
@@ -208,7 +477,9 @@ function showSection(sectionName) {
 
 function formatFCFA(amount) {
 
-    return Number(amount).toLocaleString(
+    return Number(
+        amount
+    ).toLocaleString(
         "fr-FR"
     ) + " FCFA";
 
@@ -252,7 +523,10 @@ const closeSaleModal =
 
 function openSaleModal() {
 
-    saleModal.classList.add("show");
+    saleModal.classList.add(
+        "show"
+    );
+
 
     document.getElementById(
         "sale-product"
@@ -263,7 +537,9 @@ function openSaleModal() {
 
 function closeModal() {
 
-    saleModal.classList.remove("show");
+    saleModal.classList.remove(
+        "show"
+    );
 
     saleForm.reset();
 
@@ -295,7 +571,10 @@ saleModal.addEventListener(
     "click",
     event => {
 
-        if (event.target === saleModal) {
+        if (
+            event.target ===
+            saleModal
+        ) {
 
             closeModal();
 
@@ -346,18 +625,29 @@ saleForm.addEventListener(
 
         const sale = {
 
-            id: Date.now(),
+            id:
+                Date.now(),
 
-            product: product,
+            product:
+                product,
 
-            amount: amount,
+            amount:
+                amount,
 
-            date: new Date().toISOString()
+            date:
+                new Date().toISOString(),
+
+            seller:
+                currentUser
+                    ? currentUser.name
+                    : "Inconnu"
 
         };
 
 
-        sales.unshift(sale);
+        sales.unshift(
+            sale
+        );
 
 
         saveData();
@@ -365,7 +655,6 @@ saleForm.addEventListener(
         updateDashboard();
 
         renderSales();
-
 
         closeModal();
 
@@ -389,15 +678,227 @@ function saveData() {
         JSON.stringify(sales)
     );
 
+
     localStorage.setItem(
         "stalay_products",
         JSON.stringify(products)
     );
 
+
     localStorage.setItem(
         "stalay_employees",
         JSON.stringify(employees)
     );
+
+}
+
+
+// ==========================================
+// AJOUTER UN EMPLOYÉ
+// ==========================================
+
+const addEmployeeButton =
+    document.getElementById(
+        "add-employee-button"
+    );
+
+
+addEmployeeButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            !currentUser ||
+            currentUser.role !== "owner"
+        ) {
+
+            alert(
+                "Seul le patron peut créer un compte employé."
+            );
+
+            return;
+
+        }
+
+
+        const name =
+            prompt(
+                "Nom de l'employé :"
+            );
+
+
+        if (!name) return;
+
+
+        const username =
+            prompt(
+                "Identifiant de l'employé :"
+            );
+
+
+        if (!username) return;
+
+
+        const code =
+            prompt(
+                "Code de l'employé :"
+            );
+
+
+        if (!code) return;
+
+
+        const cleanUsername =
+            username
+                .trim()
+                .toLowerCase();
+
+
+        const exists =
+            accounts.some(
+                account =>
+                    account.username ===
+                    cleanUsername
+            );
+
+
+        if (exists) {
+
+            alert(
+                "Cet identifiant existe déjà."
+            );
+
+            return;
+
+        }
+
+
+        const employee = {
+
+            id:
+                Date.now(),
+
+            name:
+                name.trim(),
+
+            username:
+                cleanUsername,
+
+            code:
+                code
+
+        };
+
+
+        accounts.push(
+            employee
+        );
+
+
+        employees.push({
+
+            id:
+                employee.id,
+
+            name:
+                employee.name
+
+        });
+
+
+        localStorage.setItem(
+            "stalay_accounts",
+            JSON.stringify(accounts)
+        );
+
+
+        saveData();
+
+        renderEmployees();
+
+        updateDashboard();
+
+
+        alert(
+            "Compte employé créé avec succès ✅\n\nIdentifiant : " +
+            employee.username +
+            "\nCode : " +
+            employee.code
+        );
+
+    }
+);
+
+
+// ==========================================
+// AFFICHER LES EMPLOYÉS
+// ==========================================
+
+function renderEmployees() {
+
+    const container =
+        document.getElementById(
+            "employees-list"
+        );
+
+
+    if (
+        employees.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    👥
+                </div>
+
+                <h3>
+                    Aucun employé
+                </h3>
+
+                <p>
+                    Créez votre premier compte employé.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        employees.map(
+            employee => `
+
+                <div class="employee-item">
+
+                    <div>
+
+                        <strong>
+                            ${escapeHTML(
+                                employee.name
+                            )}
+                        </strong>
+
+                        <small>
+                            Employé
+                        </small>
+
+                    </div>
+
+                    <span>
+                        👤
+                    </span>
+
+                </div>
+
+            `
+        ).join("");
 
 }
 
@@ -411,7 +912,10 @@ function updateDashboard() {
     const total =
         sales.reduce(
             (sum, sale) =>
-                sum + Number(sale.amount),
+                sum +
+                Number(
+                    sale.amount
+                ),
             0
         );
 
@@ -426,11 +930,15 @@ function updateDashboard() {
                 sale =>
                     new Date(
                         sale.date
-                    ).toDateString() === today
+                    ).toDateString() ===
+                    today
             )
             .reduce(
                 (sum, sale) =>
-                    sum + Number(sale.amount),
+                    sum +
+                    Number(
+                        sale.amount
+                    ),
                 0
             );
 
@@ -438,13 +946,17 @@ function updateDashboard() {
     document.getElementById(
         "today-sales"
     ).textContent =
-        formatFCFA(todayTotal);
+        formatFCFA(
+            todayTotal
+        );
 
 
     document.getElementById(
         "monthly-sales"
     ).textContent =
-        formatFCFA(total);
+        formatFCFA(
+            total
+        );
 
 
     document.getElementById(
@@ -462,7 +974,9 @@ function updateDashboard() {
     document.getElementById(
         "report-total"
     ).textContent =
-        formatFCFA(total);
+        formatFCFA(
+            total
+        );
 
 
     document.getElementById(
@@ -503,7 +1017,9 @@ function renderSales(
         );
 
 
-    if (filtered.length === 0) {
+    if (
+        filtered.length === 0
+    ) {
 
         const emptyHTML = `
 
@@ -539,7 +1055,10 @@ function renderSales(
 
 
     const recent =
-        filtered.slice(0, 5);
+        filtered.slice(
+            0,
+            5
+        );
 
 
     recentContainer.innerHTML =
@@ -556,7 +1075,9 @@ function renderSales(
 }
 
 
-function createSaleHTML(sale) {
+function createSaleHTML(
+    sale
+) {
 
     const date =
         new Date(
@@ -564,8 +1085,11 @@ function createSaleHTML(sale) {
         ).toLocaleString(
             "fr-FR",
             {
-                dateStyle: "short",
-                timeStyle: "short"
+                dateStyle:
+                    "short",
+
+                timeStyle:
+                    "short"
             }
         );
 
@@ -577,18 +1101,28 @@ function createSaleHTML(sale) {
             <div>
 
                 <strong>
-                    ${escapeHTML(sale.product)}
+                    ${escapeHTML(
+                        sale.product
+                    )}
                 </strong>
 
                 <small>
                     ${date}
+                    ${sale.seller
+                        ? " • " +
+                          escapeHTML(
+                              sale.seller
+                          )
+                        : ""}
                 </small>
 
             </div>
 
             <div class="sale-amount">
 
-                ${formatFCFA(sale.amount)}
+                ${formatFCFA(
+                    sale.amount
+                )}
 
             </div>
 
@@ -622,7 +1156,7 @@ salesSearch.addEventListener(
 
 
 // ==========================================
-// AJOUT PRODUIT
+// PRODUITS
 // ==========================================
 
 const addProductButton =
@@ -668,11 +1202,14 @@ addProductButton.addEventListener(
 
         products.push({
 
-            id: Date.now(),
+            id:
+                Date.now(),
 
-            name: name,
+            name:
+                name,
 
-            price: price
+            price:
+                price
 
         });
 
@@ -680,6 +1217,7 @@ addProductButton.addEventListener(
         saveData();
 
         renderProducts();
+
 
         alert(
             "Produit ajouté ✅"
@@ -689,10 +1227,6 @@ addProductButton.addEventListener(
 );
 
 
-// ==========================================
-// AFFICHER PRODUITS
-// ==========================================
-
 function renderProducts() {
 
     const container =
@@ -701,7 +1235,9 @@ function renderProducts() {
         );
 
 
-    if (products.length === 0) {
+    if (
+        products.length === 0
+    ) {
 
         container.innerHTML = `
 
@@ -738,7 +1274,9 @@ function renderProducts() {
                     <div>
 
                         <strong>
-                            ${escapeHTML(product.name)}
+                            ${escapeHTML(
+                                product.name
+                            )}
                         </strong>
 
                         <small>
@@ -748,125 +1286,10 @@ function renderProducts() {
                     </div>
 
                     <strong>
-                        ${formatFCFA(product.price)}
+                        ${formatFCFA(
+                            product.price
+                        )}
                     </strong>
-
-                </div>
-
-            `
-        ).join("");
-
-}
-
-
-// ==========================================
-// AJOUT EMPLOYÉ
-// ==========================================
-
-const addEmployeeButton =
-    document.getElementById(
-        "add-employee-button"
-    );
-
-
-addEmployeeButton.addEventListener(
-    "click",
-    () => {
-
-        const name =
-            prompt(
-                "Nom de l'employé :"
-            );
-
-
-        if (!name) return;
-
-
-        employees.push({
-
-            id: Date.now(),
-
-            name: name
-
-        });
-
-
-        saveData();
-
-        renderEmployees();
-
-        updateDashboard();
-
-
-        alert(
-            "Employé ajouté ✅"
-        );
-
-    }
-);
-
-
-// ==========================================
-// AFFICHER EMPLOYÉS
-// ==========================================
-
-function renderEmployees() {
-
-    const container =
-        document.getElementById(
-            "employees-list"
-        );
-
-
-    if (employees.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                <div class="empty-icon">
-                    👥
-                </div>
-
-                <h3>
-                    Aucun employé
-                </h3>
-
-                <p>
-                    Vous pourrez créer des comptes
-                    pour vos employés ici.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        employees.map(
-            employee => `
-
-                <div class="employee-item">
-
-                    <div>
-
-                        <strong>
-                            ${escapeHTML(employee.name)}
-                        </strong>
-
-                        <small>
-                            Employé
-                        </small>
-
-                    </div>
-
-                    <span>
-                        👤
-                    </span>
 
                 </div>
 
@@ -880,14 +1303,17 @@ function renderEmployees() {
 // PROTECTION HTML
 // ==========================================
 
-function escapeHTML(text) {
+function escapeHTML(
+    text
+) {
 
     const div =
         document.createElement(
             "div"
         );
 
-    div.textContent = text;
+    div.textContent =
+        text;
 
     return div.innerHTML;
 
@@ -908,10 +1334,15 @@ logoutButton.addEventListener(
     "click",
     () => {
 
-        loginScreen.style.display =
-            "flex";
+        sessionStorage.removeItem(
+            "stalay_current_user"
+        );
 
-        loginForm.reset();
+
+        currentUser = null;
+
+
+        location.reload();
 
     }
 );
@@ -930,6 +1361,13 @@ function init() {
     renderProducts();
 
     renderEmployees();
+
+
+    if (currentUser) {
+
+        showApp();
+
+    }
 
 }
 
