@@ -33,24 +33,50 @@ loginForm.addEventListener(
             document.getElementById(
                 "login-password"
             ).value;
+        
+
+if (
+    username === "admin" &&
+    password === "1234"
+) {
+
+    loginError.textContent = "";
+
+    document.querySelector(
+        ".profile strong"
+    ).textContent = "Stalay";
+
+    document.querySelector(
+        ".profile small"
+    ).textContent = "Propriétaire";
+
+    loginScreen.style.display = "none";
 
 
-        if (
-            username === "admin" &&
-            password === "1234"
-        ) {
+} else if (
+    username === "employe" &&
+    password === "1234"
+) {
 
-            loginError.textContent = "";
+    loginError.textContent = "";
 
-            loginScreen.style.display = "none";
+    document.querySelector(
+        ".profile strong"
+    ).textContent = "Employé";
 
-        } else {
+    document.querySelector(
+        ".profile small"
+    ).textContent = "Employé";
 
-            loginError.textContent =
-                "Identifiant ou mot de passe incorrect.";
+    loginScreen.style.display = "none";
 
-        }
 
+} else {
+
+    loginError.textContent =
+        "Identifiant ou mot de passe incorrect.";
+
+}
     }
 );
 
