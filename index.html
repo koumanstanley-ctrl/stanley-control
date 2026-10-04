@@ -11,8 +11,9 @@
 </head>
 
 <body>
-    <!-- =========================
-     ÉCRAN DE CONNEXION
+
+<!-- =========================
+     CONNEXION
 ========================= -->
 
 <div id="login-screen" class="login-screen">
@@ -41,12 +42,12 @@
             </label>
 
             <label>
-                Mot de passe
+                Code
 
                 <input
                     type="password"
                     id="login-password"
-                    placeholder="Votre mot de passe"
+                    placeholder="Votre code"
                     required
                 >
             </label>
@@ -65,13 +66,23 @@
 
         </form>
 
+        <button
+            id="create-owner-button"
+            class="secondary-button full-button"
+            type="button"
+        >
+            Créer mon compte patron
+        </button>
+
     </div>
 
 </div>
 
+
 <div class="app">
 
     <!-- SIDEBAR -->
+
     <aside class="sidebar">
 
         <div class="logo">
@@ -125,14 +136,21 @@
 
 
     <!-- CONTENU -->
+
     <main class="main">
 
-        <!-- TOPBAR -->
         <header class="topbar">
 
             <div>
-                <p class="welcome">Bienvenue 👋</p>
-                <h1 id="page-title">Tableau de bord</h1>
+
+                <p class="welcome">
+                    Bienvenue 👋
+                </p>
+
+                <h1 id="page-title">
+                    Tableau de bord
+                </h1>
+
             </div>
 
             <div class="profile">
@@ -142,8 +160,15 @@
                 </div>
 
                 <div>
-                    <strong>Stalay</strong>
-                    <small>Administrateur</small>
+
+                    <strong>
+                        Stalay
+                    </strong>
+
+                    <small>
+                        Patron
+                    </small>
+
                 </div>
 
             </div>
@@ -151,19 +176,26 @@
         </header>
 
 
-        <!-- ========================= -->
-        <!-- TABLEAU DE BORD -->
-        <!-- ========================= -->
+        <!-- =========================
+             TABLEAU DE BORD
+        ========================== -->
 
-        <section id="dashboard" class="page-section active-section">
+        <section
+            id="dashboard"
+            class="page-section active-section"
+        >
 
             <div class="stats">
 
                 <div class="card">
 
-                    <div class="card-icon">💰</div>
+                    <div class="card-icon">
+                        💰
+                    </div>
 
-                    <p>Ventes aujourd'hui</p>
+                    <p>
+                        Ventes aujourd'hui
+                    </p>
 
                     <h2 id="today-sales">
                         0 FCFA
@@ -178,9 +210,13 @@
 
                 <div class="card">
 
-                    <div class="card-icon">📈</div>
+                    <div class="card-icon">
+                        📈
+                    </div>
 
-                    <p>Chiffre d'affaires</p>
+                    <p>
+                        Chiffre d'affaires
+                    </p>
 
                     <h2 id="monthly-sales">
                         0 FCFA
@@ -195,9 +231,13 @@
 
                 <div class="card">
 
-                    <div class="card-icon">🧾</div>
+                    <div class="card-icon">
+                        🧾
+                    </div>
 
-                    <p>Nombre de ventes</p>
+                    <p>
+                        Nombre de ventes
+                    </p>
 
                     <h2 id="sales-count">
                         0
@@ -212,9 +252,13 @@
 
                 <div class="card">
 
-                    <div class="card-icon">👥</div>
+                    <div class="card-icon">
+                        👥
+                    </div>
 
-                    <p>Employés</p>
+                    <p>
+                        Employés
+                    </p>
 
                     <h2 id="employee-count">
                         0
@@ -228,8 +272,6 @@
 
             </div>
 
-
-            <!-- VENTES RECENTES -->
 
             <section class="panel">
 
@@ -280,8 +322,6 @@
 
             </section>
 
-
-            <!-- ACTIONS RAPIDES -->
 
             <section class="panel">
 
@@ -371,11 +411,14 @@
         </section>
 
 
-        <!-- ========================= -->
-        <!-- VENTES -->
-        <!-- ========================= -->
+        <!-- =========================
+             VENTES
+        ========================== -->
 
-        <section id="sales" class="page-section">
+        <section
+            id="sales"
+            class="page-section"
+        >
 
             <section class="panel">
 
@@ -410,21 +453,21 @@
                     placeholder="Rechercher une vente..."
                 >
 
-
-                <div id="all-sales">
-                    <!-- JavaScript -->
-                </div>
+                <div id="all-sales"></div>
 
             </section>
 
         </section>
 
 
-        <!-- ========================= -->
-        <!-- PRODUITS -->
-        <!-- ========================= -->
+        <!-- =========================
+             PRODUITS
+        ========================== -->
 
-        <section id="products" class="page-section">
+        <section
+            id="products"
+            class="page-section"
+        >
 
             <section class="panel">
 
@@ -478,11 +521,14 @@
         </section>
 
 
-        <!-- ========================= -->
-        <!-- EMPLOYÉS -->
-        <!-- ========================= -->
+        <!-- =========================
+             EMPLOYÉS
+        ========================== -->
 
-        <section id="employees" class="page-section">
+        <section
+            id="employees"
+            class="page-section"
+        >
 
             <section class="panel">
 
@@ -536,11 +582,14 @@
         </section>
 
 
-        <!-- ========================= -->
-        <!-- RAPPORTS -->
-        <!-- ========================= -->
+        <!-- =========================
+             RAPPORTS
+        ========================== -->
 
-        <section id="reports" class="page-section">
+        <section
+            id="reports"
+            class="page-section"
+        >
 
             <section class="panel">
 
@@ -581,11 +630,14 @@
         </section>
 
 
-        <!-- ========================= -->
-        <!-- PARAMÈTRES -->
-        <!-- ========================= -->
+        <!-- =========================
+             PARAMÈTRES
+        ========================== -->
 
-        <section id="settings" class="page-section">
+        <section
+            id="settings"
+            class="page-section"
+        >
 
             <section class="panel">
 
@@ -600,6 +652,7 @@
                 <div class="settings-item">
 
                     <div>
+
                         <strong>
                             Nom de l'entreprise
                         </strong>
@@ -607,6 +660,7 @@
                         <p>
                             Stalay Control
                         </p>
+
                     </div>
 
                     <button class="secondary-button">
@@ -624,9 +678,9 @@
 </div>
 
 
-<!-- ========================= -->
-<!-- MODAL NOUVELLE VENTE -->
-<!-- ========================= -->
+<!-- =========================
+     MODAL VENTE
+========================= -->
 
 <div
     class="modal"
