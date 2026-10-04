@@ -11,6 +11,63 @@
 </head>
 
 <body>
+    <!-- =========================
+     ÉCRAN DE CONNEXION
+========================= -->
+
+<div id="login-screen" class="login-screen">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            Stalay<span>Control</span>
+        </div>
+
+        <p class="login-subtitle">
+            Gérez votre activité simplement.
+        </p>
+
+        <form id="login-form">
+
+            <label>
+                Identifiant
+
+                <input
+                    type="text"
+                    id="login-username"
+                    placeholder="Votre identifiant"
+                    required
+                >
+            </label>
+
+            <label>
+                Mot de passe
+
+                <input
+                    type="password"
+                    id="login-password"
+                    placeholder="Votre mot de passe"
+                    required
+                >
+            </label>
+
+            <button
+                type="submit"
+                class="primary-button full-button"
+            >
+                Se connecter
+            </button>
+
+            <p
+                id="login-error"
+                class="login-error"
+            ></p>
+
+        </form>
+
+    </div>
+
+</div>
 
 <div class="app">
 
