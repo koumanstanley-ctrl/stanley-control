@@ -1,4 +1,4 @@
-// ==========================================
+ni// ==========================================
 // STALAY CONTROL
 // VERSION 1
 // ==========================================
@@ -827,3 +827,54 @@ function init() {
 
 
 init();
+// ==========================================
+// CONNEXION
+// ==========================================
+
+const loginScreen =
+    document.getElementById("login-screen");
+
+const loginForm =
+    document.getElementById("login-form");
+
+const loginError =
+    document.getElementById("login-error");
+
+const loginUsername =
+    document.getElementById("login-username");
+
+const loginPassword =
+    document.getElementById("login-password");
+
+
+loginForm.addEventListener(
+    "submit",
+    event => {
+
+        event.preventDefault();
+
+        const username =
+            loginUsername.value.trim();
+
+        const password =
+            loginPassword.value;
+
+
+        if (
+            username === "admin" &&
+            password === "1234"
+        ) {
+
+            loginError.textContent = "";
+
+            loginScreen.style.display = "none";
+
+        } else {
+
+            loginError.textContent =
+                "Identifiant ou mot de passe incorrect.";
+
+        }
+
+    }
+);
