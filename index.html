@@ -3,24 +3,171 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Stalay Control</title>
-    
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="container">
-  
-    <h1>Stalay Control</h1>
+    <div class="app">
 
-    <p>Gérez votre activité. Contrôlez vos ventes.</p>
-    <button>Se connecter</button>
-        
+        <!-- BARRE LATERALE -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                Stalay<span>Control</span>
+            </div>
+
+            <nav>
+                <a href="#" class="active">🏠 Tableau de bord</a>
+                <a href="#">💰 Ventes</a>
+                <a href="#">📦 Produits</a>
+                <a href="#">👥 Employés</a>
+                <a href="#">📊 Rapports</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#">⚙️ Paramètres</a>
+                <a href="#">🚪 Déconnexion</a>
+            </div>
+
+        </aside>
+
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main">
+
+            <header class="topbar">
+
+                <div>
+                    <p class="welcome">Bienvenue 👋</p>
+                    <h1>Tableau de bord</h1>
+                </div>
+
+                <div class="profile">
+                    <div class="avatar">S</div>
+
+                    <div>
+                        <strong>Stalay</strong>
+                        <small>Administrateur</small>
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- STATISTIQUES -->
+            <section class="stats">
+
+                <div class="card">
+                    <span>💰</span>
+                    <p>Ventes aujourd'hui</p>
+                    <h2>0 FCFA</h2>
+                    <small>Aucune vente enregistrée</small>
+                </div>
+
+                <div class="card">
+                    <span>📈</span>
+                    <p>Chiffre d'affaires</p>
+                    <h2>0 FCFA</h2>
+                    <small>Ce mois-ci</small>
+                </div>
+
+                <div class="card">
+                    <span>📦</span>
+                    <p>Produits</p>
+                    <h2>0</h2>
+                    <small>Produits enregistrés</small>
+                </div>
+
+                <div class="card">
+                    <span>👥</span>
+                    <p>Employés</p>
+                    <h2>0</h2>
+                    <small>Comptes actifs</small>
+                </div>
+
+            </section>
+
+
+            <!-- VENTES RECENTES -->
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="label">ACTIVITÉ</p>
+                        <h2>Ventes récentes</h2>
+                    </div>
+
+                    <button class="primary-button">
+                        + Nouvelle vente
+                    </button>
+
+                </div>
+
+                <div class="empty">
+
+                    <div class="empty-icon">🧾</div>
+
+                    <h3>Aucune vente pour le moment</h3>
+
+                    <p>
+                        Les ventes enregistrées par vous
+                        ou vos employés apparaîtront ici.
+                    </p>
+
+                    <button class="secondary-button">
+                        Enregistrer une vente
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACTIVITE -->
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="label">GESTION</p>
+                        <h2>Votre activité</h2>
+                    </div>
+
+                </div>
+
+                <div class="quick-actions">
+
+                    <div class="action">
+                        <div class="action-icon">💰</div>
+                        <h3>Ajouter une vente</h3>
+                        <p>Enregistrez rapidement une nouvelle vente.</p>
+                    </div>
+
+                    <div class="action">
+                        <div class="action-icon">📦</div>
+                        <h3>Gérer les produits</h3>
+                        <p>Ajoutez et gérez vos produits.</p>
+                    </div>
+
+                    <div class="action">
+                        <div class="action-icon">👤</div>
+                        <h3>Ajouter un employé</h3>
+                        <p>Créez un compte pour votre équipe.</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
     </div>
-    
+
 </body>
 </html>
