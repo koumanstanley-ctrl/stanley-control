@@ -5,20 +5,24 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background: #f5f6f8;
     color: #171717;
 }
 
-button {
+button,
+input {
     font-family: inherit;
+}
+
+button {
     cursor: pointer;
     border: none;
 }
 
 
 /* =========================
-   APPLICATION
+   APP
 ========================= */
 
 .app {
@@ -36,13 +40,15 @@ button {
     min-height: 100vh;
 
     background: #111;
-
     color: white;
 
     padding: 30px 20px;
 
     display: flex;
     flex-direction: column;
+
+    position: sticky;
+    top: 0;
 }
 
 .logo {
@@ -56,31 +62,41 @@ button {
     color: #777;
 }
 
-.sidebar nav {
+.navigation {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.sidebar a {
-    color: #aaa;
-    text-decoration: none;
+.nav-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
 
     padding: 13px 15px;
 
+    background: transparent;
+
+    color: #aaa;
+
     border-radius: 10px;
+
+    text-align: left;
 
     font-size: 14px;
 
     transition: 0.2s;
 }
 
-.sidebar a:hover {
+.nav-item:hover {
     background: #222;
     color: white;
 }
 
-.sidebar a.active {
+.nav-item.active {
     background: white;
     color: #111;
 }
@@ -90,6 +106,7 @@ button {
 
     display: flex;
     flex-direction: column;
+
     gap: 5px;
 }
 
@@ -100,10 +117,9 @@ button {
 
 .main {
     flex: 1;
-
     padding: 35px;
 
-    max-width: 1400px;
+    max-width: 1500px;
 }
 
 
@@ -122,6 +138,7 @@ button {
 
 .welcome {
     color: #777;
+
     font-size: 14px;
 
     margin-bottom: 5px;
@@ -133,7 +150,6 @@ button {
 
 .profile {
     display: flex;
-
     align-items: center;
 
     gap: 10px;
@@ -167,7 +183,20 @@ button {
 
 
 /* =========================
-   STATISTIQUES
+   SECTIONS
+========================= */
+
+.page-section {
+    display: none;
+}
+
+.active-section {
+    display: block;
+}
+
+
+/* =========================
+   STATS
 ========================= */
 
 .stats {
@@ -194,7 +223,7 @@ button {
         0 5px 20px rgba(0,0,0,0.04);
 }
 
-.card > span {
+.card-icon {
     font-size: 25px;
 }
 
@@ -241,6 +270,8 @@ button {
     justify-content: space-between;
     align-items: center;
 
+    gap: 15px;
+
     margin-bottom: 25px;
 }
 
@@ -262,7 +293,7 @@ button {
 
 
 /* =========================
-   BOUTONS
+   BUTTONS
 ========================= */
 
 .primary-button {
@@ -275,10 +306,14 @@ button {
     border-radius: 10px;
 
     font-weight: bold;
+
+    transition: 0.2s;
 }
 
 .primary-button:hover {
     background: #333;
+
+    transform: translateY(-1px);
 }
 
 .secondary-button {
@@ -293,9 +328,13 @@ button {
     font-weight: bold;
 }
 
+.full-button {
+    width: 100%;
+}
+
 
 /* =========================
-   EMPTY STATE
+   EMPTY
 ========================= */
 
 .empty {
@@ -343,11 +382,15 @@ button {
 }
 
 .action {
+    background: white;
+
     padding: 25px;
 
     border: 1px solid #eee;
 
     border-radius: 15px;
+
+    text-align: left;
 
     transition: 0.2s;
 }
@@ -379,13 +422,220 @@ button {
 
 
 /* =========================
+   SEARCH
+========================= */
+
+.search {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    margin-bottom: 20px;
+
+    font-size: 14px;
+}
+
+.search:focus {
+    border-color: #111;
+}
+
+
+/* =========================
+   LISTES
+========================= */
+
+.sale-item,
+.product-item,
+.employee-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 18px;
+
+    border: 1px solid #eee;
+
+    border-radius: 12px;
+
+    margin-bottom: 10px;
+}
+
+.sale-item strong,
+.product-item strong,
+.employee-item strong {
+    display: block;
+}
+
+.sale-item small,
+.product-item small,
+.employee-item small {
+    color: #777;
+}
+
+.sale-amount {
+    font-weight: bold;
+}
+
+
+/* =========================
+   RAPPORTS
+========================= */
+
+.report-card {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px;
+
+    background: #f7f7f7;
+
+    border-radius: 12px;
+
+    margin-top: 15px;
+}
+
+.report-card strong {
+    font-size: 20px;
+}
+
+
+/* =========================
+   PARAMETRES
+========================= */
+
+.settings-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px;
+
+    background: #f7f7f7;
+
+    border-radius: 12px;
+
+    margin-top: 20px;
+}
+
+.settings-item p {
+    color: #777;
+
+    margin-top: 5px;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.55);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 999;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 450px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.modal-header h2 {
+    font-size: 24px;
+}
+
+.close-button {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #f1f1f1;
+
+    font-size: 25px;
+
+    line-height: 1;
+}
+
+form label {
+    display: block;
+
+    margin-bottom: 20px;
+
+    font-weight: bold;
+}
+
+form input {
+    width: 100%;
+
+    margin-top: 8px;
+
+    padding: 14px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    outline: none;
+}
+
+form input:focus {
+    border-color: #111;
+}
+
+
+/* =========================
    MOBILE
 ========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
 
     .sidebar {
-        width: 210px;
+        width: 215px;
     }
 
     .main {
@@ -411,23 +661,26 @@ button {
 
     .sidebar {
         width: 100%;
+
         min-height: auto;
 
         padding: 20px;
+
+        position: static;
     }
 
     .logo {
         margin-bottom: 20px;
     }
 
-    .sidebar nav {
+    .navigation {
         flex-direction: row;
 
         overflow-x: auto;
     }
 
-    .sidebar nav a {
-        white-space: nowrap;
+    .nav-item {
+        min-width: max-content;
     }
 
     .sidebar-bottom {
@@ -461,11 +714,25 @@ button {
     }
 
     .panel-header {
-        align-items: flex-start;
-
-        gap: 15px;
-
         flex-direction: column;
+
+        align-items: flex-start;
     }
 
+    .sale-item,
+    .product-item,
+    .employee-item {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .report-card,
+    .settings-item {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
 }
