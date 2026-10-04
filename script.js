@@ -5,6 +5,57 @@
 
 
 // ==========================================
+// CONNEXION
+// ==========================================
+
+const loginScreen =
+    document.getElementById("login-screen");
+
+const loginForm =
+    document.getElementById("login-form");
+
+const loginError =
+    document.getElementById("login-error");
+
+
+loginForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        const username =
+            document.getElementById(
+                "login-username"
+            ).value.trim();
+
+        const password =
+            document.getElementById(
+                "login-password"
+            ).value;
+
+
+        if (
+            username === "admin" &&
+            password === "1234"
+        ) {
+
+            loginError.textContent = "";
+
+            loginScreen.style.display = "none";
+
+        } else {
+
+            loginError.textContent =
+                "Identifiant ou mot de passe incorrect.";
+
+        }
+
+    }
+);
+
+
+// ==========================================
 // DONNÉES
 // ==========================================
 
@@ -26,10 +77,14 @@ let employees = JSON.parse(
 // ==========================================
 
 const navItems =
-    document.querySelectorAll(".nav-item[data-section]");
+    document.querySelectorAll(
+        ".nav-item[data-section]"
+    );
 
 const sections =
-    document.querySelectorAll(".page-section");
+    document.querySelectorAll(
+        ".page-section"
+    );
 
 const pageTitle =
     document.getElementById("page-title");
@@ -41,14 +96,17 @@ const pageTitle =
 
 navItems.forEach(item => {
 
-    item.addEventListener("click", () => {
+    item.addEventListener(
+        "click",
+        () => {
 
-        const sectionName =
-            item.dataset.section;
+            const sectionName =
+                item.dataset.section;
 
-        showSection(sectionName);
+            showSection(sectionName);
 
-    });
+        }
+    );
 
 });
 
@@ -65,7 +123,10 @@ function showSection(sectionName) {
 
 
     const selectedSection =
-        document.getElementById(sectionName);
+        document.getElementById(
+            sectionName
+        );
+
 
     if (selectedSection) {
 
@@ -109,7 +170,8 @@ function showSection(sectionName) {
 
 
     pageTitle.textContent =
-        titles[sectionName] || "Stalay Control";
+        titles[sectionName] ||
+        "Stalay Control";
 
 }
 
@@ -132,22 +194,34 @@ function formatFCFA(amount) {
 // ==========================================
 
 const saleModal =
-    document.getElementById("sale-modal");
+    document.getElementById(
+        "sale-modal"
+    );
 
 const saleForm =
-    document.getElementById("sale-form");
+    document.getElementById(
+        "sale-form"
+    );
 
 const openSaleButton =
-    document.getElementById("open-sale-button");
+    document.getElementById(
+        "open-sale-button"
+    );
 
 const openSaleButton2 =
-    document.getElementById("open-sale-button-2");
+    document.getElementById(
+        "open-sale-button-2"
+    );
 
 const quickSale =
-    document.getElementById("quick-sale");
+    document.getElementById(
+        "quick-sale"
+    );
 
 const closeSaleModal =
-    document.getElementById("close-sale-modal");
+    document.getElementById(
+        "close-sale-modal"
+    );
 
 
 function openSaleModal() {
@@ -230,7 +304,10 @@ saleForm.addEventListener(
             );
 
 
-        if (!product || amount <= 0) {
+        if (
+            !product ||
+            amount <= 0
+        ) {
 
             alert(
                 "Veuillez remplir correctement les informations."
@@ -390,12 +467,13 @@ function renderSales(
 
 
     const filtered =
-        sales.filter(sale =>
-            sale.product
-                .toLowerCase()
-                .includes(
-                    searchTerm.toLowerCase()
-                )
+        sales.filter(
+            sale =>
+                sale.product
+                    .toLowerCase()
+                    .includes(
+                        searchTerm.toLowerCase()
+                    )
         );
 
 
@@ -548,7 +626,10 @@ addProductButton.addEventListener(
             );
 
 
-        if (!price || price <= 0) {
+        if (
+            !price ||
+            price <= 0
+        ) {
 
             alert(
                 "Prix invalide."
@@ -801,9 +882,10 @@ logoutButton.addEventListener(
     "click",
     () => {
 
-        alert(
-            "La vraie connexion sera ajoutée avec Supabase."
-        );
+        loginScreen.style.display =
+            "flex";
+
+        loginForm.reset();
 
     }
 );
@@ -827,54 +909,3 @@ function init() {
 
 
 init();
-// ==========================================
-// CONNEXION
-// ==========================================
-
-const loginScreen =
-    document.getElementById("login-screen");
-
-const loginForm =
-    document.getElementById("login-form");
-
-const loginError =
-    document.getElementById("login-error");
-
-const loginUsername =
-    document.getElementById("login-username");
-
-const loginPassword =
-    document.getElementById("login-password");
-
-
-loginForm.addEventListener(
-    "submit",
-    event => {
-
-        event.preventDefault();
-
-        const username =
-            loginUsername.value.trim();
-
-        const password =
-            loginPassword.value;
-
-
-        if (
-            username === "admin" &&
-            password === "1234"
-        ) {
-
-            loginError.textContent = "";
-
-            loginScreen.style.display = "none";
-
-        } else {
-
-            loginError.textContent =
-                "Identifiant ou mot de passe incorrect.";
-
-        }
-
-    }
-);
