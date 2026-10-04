@@ -316,64 +316,85 @@ function applyPermissions() {
     const employeesButton =
         document.querySelector(
             '[data-section="employees"]'
-        );
+            function applyPermissions() {
 
+    const isOwner =
+        currentUser &&
+        currentUser.role === "owner";
+
+    const employeesButton =
+        document.querySelector(
+            '[data-section="employees"]'
+        );
 
     const reportsButton =
         document.querySelector(
             '[data-section="reports"]'
         );
 
+    const settingsButton =
+        document.querySelector(
+            '[data-section="settings"]'
+        );
 
     const productsButton =
         document.querySelector(
             '[data-section="products"]'
         );
 
+    // =========================
+    // 👤 EMPLOYÉ
+    // =========================
 
     if (!isOwner) {
 
+        // ❌ Pas de gestion des employés
         if (employeesButton) {
-
-            employeesButton.style.display =
-                "none";
-
+            employeesButton.style.display = "none";
         }
 
-
+        // ❌ Pas de rapports financiers
         if (reportsButton) {
+            reportsButton.style.display = "none";
+        }
 
-            reportsButton.style.display =
-                "none";
+        // ❌ Pas des paramètres
+        if (settingsButton) {
+            settingsButton.style.display = "none";
+        }
 
+        // 👤 L'employé garde l'accès aux produits
+        if (productsButton) {
+            productsButton.style.display = "";
         }
 
     }
 
+    // =========================
+    // 👑 PATRON
+    // =========================
 
     else {
 
         if (employeesButton) {
-
-            employeesButton.style.display =
-                "";
-
+            employeesButton.style.display = "";
         }
 
-
         if (reportsButton) {
+            reportsButton.style.display = "";
+        }
 
-            reportsButton.style.display =
-                "";
+        if (settingsButton) {
+            settingsButton.style.display = "";
+        }
 
+        if (productsButton) {
+            productsButton.style.display = "";
         }
 
     }
-
 }
-
-
-// ==========================================
+===================
 // NAVIGATION
 // ==========================================
 
