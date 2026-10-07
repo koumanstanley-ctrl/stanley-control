@@ -1,10 +1,14 @@
+// ==========================================
+// SUPABASE
+// ==========================================
+
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const SUPABASE_URL =
     "https://aakbqwlksrqjcrbkbwrw.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_xKfIvvXO66xxi3oeZn7HnA_YZlsvT7F"; 
+    "sb_publishable_xKfIvvXO66xxi3oeZn7HnA_YZlsvT7F";
 
 const supabase =
     createClient(
@@ -14,9 +18,10 @@ const supabase =
 
 console.log("Supabase connecté ✅");
 
+
 // ==========================================
 // STALAY CONTROL
-// VERSION 3 — COMPTES + PERMISSIONS
+// VERSION 4 — SUPABASE PRODUITS
 // ==========================================
 
 
@@ -187,8 +192,9 @@ if (loginForm) {
                     "login-password"
                 ).value;
 
+
             // ==========================
-            // 👑 CONNEXION PATRON
+            // CONNEXION PATRON
             // ==========================
 
             if (
@@ -224,7 +230,7 @@ if (loginForm) {
 
 
             // ==========================
-            // 👤 CONNEXION EMPLOYÉ
+            // CONNEXION EMPLOYÉ
             // ==========================
 
             const employee =
@@ -263,7 +269,7 @@ if (loginForm) {
 
 
             // ==========================
-            // ❌ IDENTIFIANTS INCORRECTS
+            // IDENTIFIANTS INCORRECTS
             // ==========================
 
             loginError.textContent =
@@ -288,6 +294,7 @@ function showApp() {
     loginScreen.style.display =
         "none";
 
+
     const profileName =
         document.querySelector(
             ".profile strong"
@@ -298,12 +305,14 @@ function showApp() {
             ".profile small"
         );
 
+
     if (profileName) {
 
         profileName.textContent =
             currentUser.name;
 
     }
+
 
     if (profileRole) {
 
@@ -314,9 +323,10 @@ function showApp() {
 
     }
 
+
     applyPermissions();
 
-    // L'employé arrive directement sur les ventes
+
     if (
         currentUser.role === "employee"
     ) {
@@ -329,7 +339,7 @@ function showApp() {
 
 
 // ==========================================
-// 🔐 PERMISSIONS
+// PERMISSIONS
 // ==========================================
 
 function applyPermissions() {
@@ -361,7 +371,7 @@ function applyPermissions() {
 
 
     // ======================================
-    // 👤 EMPLOYÉ
+    // EMPLOYÉ
     // ======================================
 
     if (!isOwner) {
@@ -387,7 +397,6 @@ function applyPermissions() {
 
         }
 
-        // Produits autorisés
         if (productsButton) {
 
             productsButton.style.display =
@@ -399,7 +408,7 @@ function applyPermissions() {
 
 
     // ======================================
-    // 👑 PATRON
+    // PATRON
     // ======================================
 
     else {
@@ -451,7 +460,7 @@ navItems.forEach(
                 const sectionName =
                     item.dataset.section;
 
-                // Protection supplémentaire
+
                 if (
                     currentUser &&
                     currentUser.role === "employee" &&
@@ -469,6 +478,7 @@ navItems.forEach(
                     return;
 
                 }
+
 
                 showSection(
                     sectionName
@@ -505,6 +515,7 @@ function showSection(
             sectionName
         );
 
+
     if (selectedSection) {
 
         selectedSection.classList.add(
@@ -520,6 +531,7 @@ function showSection(
             item.classList.remove(
                 "active"
             );
+
 
             if (
                 item.dataset.section ===
@@ -632,10 +644,12 @@ function openSaleModal() {
         "show"
     );
 
+
     const input =
         document.getElementById(
             "sale-product"
         );
+
 
     if (input) {
         input.focus();
@@ -664,6 +678,7 @@ if (openSaleButton) {
 
 }
 
+
 if (openSaleButton2) {
 
     openSaleButton2.addEventListener(
@@ -672,6 +687,7 @@ if (openSaleButton2) {
     );
 
 }
+
 
 if (quickSale) {
 
@@ -682,6 +698,7 @@ if (quickSale) {
 
 }
 
+
 if (closeSaleModal) {
 
     closeSaleModal.addEventListener(
@@ -690,6 +707,7 @@ if (closeSaleModal) {
     );
 
 }
+
 
 if (saleModal) {
 
@@ -724,6 +742,7 @@ if (saleForm) {
 
             event.preventDefault();
 
+
             if (!currentUser) {
 
                 alert(
@@ -734,10 +753,12 @@ if (saleForm) {
 
             }
 
+
             const product =
                 document.getElementById(
                     "sale-product"
                 ).value.trim();
+
 
             const amount =
                 Number(
@@ -785,6 +806,7 @@ if (saleForm) {
                 sale
             );
 
+
             saveData();
 
             updateDashboard();
@@ -805,7 +827,7 @@ if (saleForm) {
 
 
 // ==========================================
-// SAUVEGARDE
+// SAUVEGARDE LOCALE
 // ==========================================
 
 function saveData() {
@@ -815,10 +837,12 @@ function saveData() {
         JSON.stringify(sales)
     );
 
+
     localStorage.setItem(
         "stalay_products",
         JSON.stringify(products)
     );
+
 
     localStorage.setItem(
         "stalay_employees",
@@ -829,7 +853,7 @@ function saveData() {
 
 
 // ==========================================
-// 👑 AJOUTER UN EMPLOYÉ
+// AJOUTER UN EMPLOYÉ
 // ==========================================
 
 const addEmployeeButton =
@@ -863,6 +887,7 @@ if (addEmployeeButton) {
                     "Nom de l'employé :"
                 );
 
+
             if (!name) return;
 
 
@@ -871,6 +896,7 @@ if (addEmployeeButton) {
                     "Identifiant de l'employé :"
                 );
 
+
             if (!username) return;
 
 
@@ -878,6 +904,7 @@ if (addEmployeeButton) {
                 prompt(
                     "Code de l'employé :"
                 );
+
 
             if (!code) return;
 
@@ -888,7 +915,6 @@ if (addEmployeeButton) {
                     .toLowerCase();
 
 
-            // Vérifier l'identifiant
             const exists =
                 accounts.some(
                     account =>
@@ -978,6 +1004,7 @@ function renderEmployees() {
         document.getElementById(
             "employees-list"
         );
+
 
     if (!container) {
         return;
@@ -1090,25 +1117,30 @@ function updateDashboard() {
             "today-sales"
         );
 
+
     const monthlySales =
         document.getElementById(
             "monthly-sales"
         );
+
 
     const salesCount =
         document.getElementById(
             "sales-count"
         );
 
+
     const employeeCount =
         document.getElementById(
             "employee-count"
         );
 
+
     const reportTotal =
         document.getElementById(
             "report-total"
         );
+
 
     const reportCount =
         document.getElementById(
@@ -1185,6 +1217,7 @@ function renderSales(
             "recent-sales"
         );
 
+
     const allContainer =
         document.getElementById(
             "all-sales"
@@ -1241,8 +1274,10 @@ function renderSales(
         recentContainer.innerHTML =
             emptyHTML;
 
+
         allContainer.innerHTML =
             emptyHTML;
+
 
         return;
 
@@ -1357,7 +1392,7 @@ if (salesSearch) {
 
 
 // ==========================================
-// PRODUITS
+// PRODUITS — SUPABASE
 // ==========================================
 
 const addProductButton =
@@ -1366,11 +1401,77 @@ const addProductButton =
     );
 
 
+// ==========================================
+// CHARGER LES PRODUITS DEPUIS SUPABASE
+// ==========================================
+
+async function loadProductsFromSupabase() {
+
+    const {
+        data,
+        error
+    } = await supabase
+        .from("products")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur chargement produits :",
+            error
+        );
+
+        return;
+
+    }
+
+
+    products =
+        data.map(
+            product => ({
+
+                id:
+                    product.id,
+
+                name:
+                    product.name,
+
+                price:
+                    Number(
+                        product.price
+                    )
+
+            })
+        );
+
+
+    localStorage.setItem(
+        "stalay_products",
+        JSON.stringify(products)
+    );
+
+
+    renderProducts();
+
+}
+
+
+// ==========================================
+// AJOUTER UN PRODUIT
+// ==========================================
+
 if (addProductButton) {
 
     addProductButton.addEventListener(
         "click",
-        () => {
+        async () => {
 
             // Employé ne peut pas ajouter
             // de produits
@@ -1393,6 +1494,7 @@ if (addProductButton) {
                 prompt(
                     "Nom du produit :"
                 );
+
 
             if (!name) return;
 
@@ -1419,16 +1521,68 @@ if (addProductButton) {
             }
 
 
-            products.push({
+            // ======================================
+            // ENVOYER LE PRODUIT À SUPABASE
+            // ======================================
+
+            const {
+                data,
+                error
+            } =
+                await supabase
+                    .from("products")
+                    .insert([
+                        {
+                            name:
+                                name.trim(),
+
+                            price:
+                                price
+                        }
+                    ])
+                    .select()
+                    .single();
+
+
+            // ======================================
+            // ERREUR
+            // ======================================
+
+            if (error) {
+
+                console.error(
+                    "Erreur Supabase :",
+                    error
+                );
+
+
+                alert(
+                    "Erreur lors de l'ajout du produit ❌\n\n" +
+                    error.message
+                );
+
+
+                return;
+
+            }
+
+
+            // ======================================
+            // AJOUT LOCAL
+            // ======================================
+
+            products.unshift({
 
                 id:
-                    Date.now(),
+                    data.id,
 
                 name:
-                    name.trim(),
+                    data.name,
 
                 price:
-                    price
+                    Number(
+                        data.price
+                    )
 
             });
 
@@ -1439,7 +1593,7 @@ if (addProductButton) {
 
 
             alert(
-                "Produit ajouté ✅"
+                "Produit ajouté à Supabase ✅"
             );
 
         }
@@ -1447,6 +1601,10 @@ if (addProductButton) {
 
 }
 
+
+// ==========================================
+// AFFICHER LES PRODUITS
+// ==========================================
 
 function renderProducts() {
 
@@ -1538,8 +1696,10 @@ function escapeHTML(
             "div"
         );
 
+
     div.textContent =
         text;
+
 
     return div.innerHTML;
 
@@ -1566,7 +1726,9 @@ if (logoutButton) {
                 "stalay_current_user"
             );
 
+
             currentUser = null;
+
 
             location.reload();
 
@@ -1580,7 +1742,7 @@ if (logoutButton) {
 // INITIALISATION
 // ==========================================
 
-function init() {
+async function init() {
 
     updateDashboard();
 
@@ -1596,6 +1758,10 @@ function init() {
         showApp();
 
     }
+
+
+    // Charger les produits depuis Supabase
+    await loadProductsFromSupabase();
 
 }
 
